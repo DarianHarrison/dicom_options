@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: orthanc-ss
-  # labels:
-  #   hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant
+  labels:
+    hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant
 spec:
   serviceName: "orthanc"
   replicas: 1
