@@ -1,31 +1,12 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: orthanc
-  namespace: l10ns
-  labels:
-    app: orthanc
-spec:
-  selector:
-    app: orthanc  
-  ports:
-  - name: port-1
-    port: 8042
-    protocol: TCP
-    targetPort: 8042
-  type: NodePort
-
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: orthanc-ss
-  namespace: l10ns
   # labels:
-  #   hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant  
+  #   hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant
 spec:
   serviceName: "orthanc"
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: orthanc
@@ -35,20 +16,42 @@ spec:
         app: orthanc
     spec:
       containers:
-      - name: orthanc
-        image: jodogne/orthanc:1.9.2
-        ports:
-        - containerPort: 8042
-          name: port-1
-        volumeMounts:
-        - name: df-mount
-          mountPath: /var/lib/orthanc/db
+        - name: orthanc
+          image: jodogne/orthanc:1.9.2
+          resources:
+            requests:
+              memory: "1Gi" 
+              cpu: 1
+            limits:
+              memory: "2Gi"
+              cpu: 2
+          ports:
+          - containerPort: 8042
+            name: port-1
+          volumeMounts:
+          - name: df-mount
+            mountPath: /var/lib/orthanc/db
   volumeClaimTemplates:
   - metadata:
       name: df-mount
     spec:
-      storageClassName: managed-nfs-storage
+      storageClassName: picasso
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
           storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orthanc
+  namespace: mlops-on-k8s
+  labels:
+    app: orthanc
+spec:
+  selector:
+    app: orthanc  
+  ports:
+  - name: port-1
+    port: 8042
+  type: NodePort
