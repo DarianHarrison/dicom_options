@@ -26,11 +26,10 @@ notice it is the same file that is stored in a persistent volume.
 
 on a k8s master
 ```
-kubectl apply -f 
+create local pv,pvc
+statefulsets with node affinities
 ```
 
 
-
-
-option 3: ingest
+### option 3: posix client with docker image and volume that gets backed to the datafabric
 
