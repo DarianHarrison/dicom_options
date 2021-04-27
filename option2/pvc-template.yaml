@@ -5,9 +5,9 @@ metadata:
   name: my-dynamic-pvc # change here
   namespace: mlops-on-k8s # change here
 spec:
+  storageClassName: picasso # this should be the name of your dynamic provisioner 
   accessModes:
     - ReadWriteOnce
-  storageClassName: picasso # this should be the name of your dynamic provisioner 
   resources:
     requests:
-      storage: 5G
+      storage: 1G

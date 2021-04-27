@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: orthanc-ss
+  namespace: mlops-on-k8s
   labels:
     hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant
 spec:
@@ -15,9 +16,24 @@ spec:
       labels:
         app: orthanc
     spec:
+      initContainers: # These containers are run during pod initialization
+      - name: install
+        image: busybox
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        args:
+        - sleep
+        - "1000000"            
+    spec:
       containers:
         - name: orthanc
           image: jodogne/orthanc:1.9.2
+          imagePullPolicy: IfNotPresent        
           resources:
             requests:
               memory: "1Gi" 
@@ -31,15 +47,19 @@ spec:
           volumeMounts:
           - name: df-mount
             mountPath: /var/lib/orthanc/db
-  volumeClaimTemplates:
-  - metadata:
-      name: df-mount
-    spec:
-      storageClassName: picasso
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
+      volumes:
+        - name: df-mount
+          persistentVolumeClaim:
+            claimName: my-dynamic-pvc           
+  # volumeClaimTemplates:
+  # - metadata:
+  #     name: df-mount
+  #   spec:
+  #     storageClassName: picasso
+  #     accessModes: [ "ReadWriteOnce" ]
+  #     resources:
+  #       requests:
+  #         storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
