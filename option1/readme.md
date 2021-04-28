@@ -1,6 +1,6 @@
 1)
 ```
-mkdir /tmp/orthanc-db
+mkdir -p /tmp/orthanc-db
 docker run -p 4242:4242 -p 8042:8042 --rm -v /tmp/orthanc-db/:/var/lib/orthanc/db/ jodogne/orthanc:1.9.2
 ```
 2) go to ui <ip>:8082, authenticate with user:orthanc pass: orthanc
@@ -19,4 +19,4 @@ md5sum
 ```
 d7ed604ecbc575ab45820f91ba576581
 
-notice it is the same file that is stored in a persistent volume. 
+notice it is the same file that is stored in a directory. 

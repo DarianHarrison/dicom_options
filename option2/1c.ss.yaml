@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: orthanc-ss
-  namespace: l10ns
+  namespace: l10
   labels:
     hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant
 spec:
@@ -47,7 +47,7 @@ spec:
   - metadata:
       name: df-mount
     spec:
-      storageClassName: l10-local-storage
+      storageClassName: picasso
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
@@ -57,7 +57,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: orthanc
-  namespace: l10ns
+  namespace: mlops-on-k8s
   labels:
     app: orthanc
 spec:

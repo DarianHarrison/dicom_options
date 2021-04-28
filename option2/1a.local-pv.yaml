@@ -1,0 +1,50 @@
+# next we test statefulsets, so that all pods can be fast
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-pv1
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  # - ReadOnlyMany 
+  # - ReadWriteMany 
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: l10-local-storage
+  local:
+    path: /tmp/orthanc-db/
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          # - m2-ess-vm83.mip.storage.hpecorp.net
+          - m2-ess-vm82.mip.storage.hpecorp.net
+---          
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-pv2
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  # - ReadOnlyMany
+  # - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: l10-local-storage
+  local:
+    path: /tmp/orthanc-db/
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - m2-ess-vm83.mip.storage.hpecorp.net
+          # - m2-ess-vm82.mip.storage.hpecorp.net
