@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: orthanc-ss
-  namespace: l10
+  name: orthanc-ss-2
+  namespace: mlops
   labels:
     hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant
 spec:
   serviceName: "orthanc"
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: orthanc
@@ -39,7 +39,7 @@ spec:
             cpu: 2
         ports:
         - containerPort: 8042
-          name: port-1
+          name: http-orthanc
         volumeMounts:
         - name: df-mount
           mountPath: /var/lib/orthanc/db
@@ -47,7 +47,7 @@ spec:
   - metadata:
       name: df-mount
     spec:
-      storageClassName: picasso
+      storageClassName: l10-local-storage
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
@@ -56,14 +56,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: orthanc
-  namespace: mlops-on-k8s
+  name: orthanc-2
+  namespace: mlops
   labels:
     app: orthanc
+    hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant    
 spec:
   selector:
     app: orthanc  
   ports:
-  - name: port-1
+  - name: http-orthanc
     port: 8042
   type: NodePort
