@@ -1,7 +1,0 @@
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: l10-local-storage
-  namespace: l10ns
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: Immediate # this is very important to leave like this, it will remain unbound until requested
