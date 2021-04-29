@@ -10,6 +10,7 @@ x = requests.get(BASE_URL+"/studies")
 
 y = requests.get(BASE_URL+"/studies/8a8cf898-ca27c490-d0c7058c-929d0581-2bbf104d")
 print(y.content)
+
 # curl "http://orthanc:orthanc@10.163.168.140:8042/instances/8a8cf898-ca27c490-d0c7058c-929d0581-2bbf104d/file"
 
 # import matplotlib.pyplot as plt
