@@ -6,15 +6,27 @@ HOST="10.163.168.140"
 PORT="8042"
 BASE_URL="http://{}:{}@{}:{}".format(USER,PASS,HOST,PORT)
 
-x = requests.get(BASE_URL+"/studies")
+x = requests.get(BASE_URL+"/instances")
+print(x.text)
 
-y = requests.get(BASE_URL+"/studies/8a8cf898-ca27c490-d0c7058c-929d0581-2bbf104d")
-print(y.content)
+##########################
 
-# curl "http://orthanc:orthanc@10.163.168.140:8042/instances/8a8cf898-ca27c490-d0c7058c-929d0581-2bbf104d/file"
+from orthanc_rest_client import Orthanc
+from requests.auth import HTTPBasicAuth
 
-# import matplotlib.pyplot as plt
-# import pydicom
-# ds = pydicom.dcmread("sample.dcm")
-# plt.imshow(ds.pixel_array, cmap=plt.cm.bone) 
-# plt.show()
+auth = HTTPBasicAuth(USER, PASS)
+orthanc = Orthanc('http://{}:{}'.format(HOST,PORT), auth=auth, warn_insecure=False)
+
+def save_dcm_file(instance_id):
+    fileName = '.'.join([instance_id, "dcm"])
+    with open(fileName, 'wb') as dcm:
+        for chunk in orthanc.get_instance_file(instance_id):
+            dcm.write(chunk)
+
+save_dcm_file("f689ddd2-662f8fe1-8b18180d-ec2a2cee-937917af")
+
+import matplotlib.pyplot as plt
+import pydicom
+ds = pydicom.dcmread("f689ddd2-662f8fe1-8b18180d-ec2a2cee-937917af.dcm")
+plt.imshow(ds.pixel_array, cmap=plt.cm.bone) 
+plt.show()
