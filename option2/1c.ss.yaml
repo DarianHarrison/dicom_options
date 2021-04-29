@@ -4,7 +4,7 @@ metadata:
   name: orthanc-ss-2
   namespace: mlops
   labels:
-    hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant
+    hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for gateway mapping
 spec:
   serviceName: "orthanc"
   replicas: 1
@@ -16,7 +16,7 @@ spec:
       labels:
         app: orthanc
     spec:
-      initContainers: # These containers are run during pod initialization
+      initContainers:
       - name: install
         image: busybox
         resources:
@@ -47,7 +47,7 @@ spec:
   - metadata:
       name: df-mount
     spec:
-      storageClassName: l10-local-storage
+      storageClassName: hcp-mapr-cluster # 
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
