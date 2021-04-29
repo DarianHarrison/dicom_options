@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: orthanc-ss-2
-  namespace: mlops
+  namespace: l10ns
   labels:
     hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for gateway mapping
 spec:
@@ -39,7 +39,9 @@ spec:
             cpu: 2
         ports:
         - containerPort: 8042
-          name: http-orthanc
+          name: http-http-server
+        - containerPort: 4242
+          name: http-dicom-server     
         volumeMounts:
         - name: df-mount
           mountPath: /var/lib/orthanc/db
@@ -57,7 +59,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: orthanc-2
-  namespace: mlops
+  namespace: l10ns
   labels:
     app: orthanc
     hpecp.hpe.com/hpecp-internal-gateway: "true"  # change here for ECP5.1 my-tenant    
@@ -65,6 +67,8 @@ spec:
   selector:
     app: orthanc  
   ports:
-  - name: http-orthanc
-    port: 8042
+  - port: 8042
+    name: http-http-server
+  - port: 4242
+    name: http-dicom-server
   type: NodePort
