@@ -19,14 +19,12 @@ HARD_CODED_FILENAME="f689ddd2-662f8fe1-8b18180d-ec2a2cee-937917af"
 import requests
 BASE_URL="http://{}:{}@{}:{}".format(USER,PASS,HOST,PORT)
 x = requests.get(BASE_URL+"/instances")
-print(x.text)
-
-# HARD_CODED_FILENAME=eval(x.text)[0]
+print("files: ",eval(x.text))
 
 ##########################
 # SAVE TO FILE
 ##########################
-from orthanc_rest_client import Orthanc
+from beren import Orthanc
 from requests.auth import HTTPBasicAuth
 
 REST_BASE_URL='http://{}:{}'.format(HOST,PORT)
