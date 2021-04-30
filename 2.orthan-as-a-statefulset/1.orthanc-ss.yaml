@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: orthanc-ss-2
+  name: orthanc-ss-3
   namespace: l10ns # modify here
   labels:
     hpecp.hpe.com/hpecp-internal-gateway: "true"  
@@ -39,9 +39,9 @@ spec:
             cpu: 2
         ports:
         - containerPort: 8042
-          name: http-http-server
+          name: http-http-srv
         - containerPort: 4242
-          name: http-dicom-server     
+          name: http-dicom-srv
         volumeMounts:
         - name: df-mount
           mountPath: /var/lib/orthanc/db
@@ -58,7 +58,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: orthanc-2
+  name: orthanc-3
   namespace: l10ns # modify here
   labels:
     app: orthanc
@@ -68,7 +68,7 @@ spec:
     app: orthanc  
   ports:
   - port: 8042
-    name: http-http-server
+    name: http-http-srv
   - port: 4242
-    name: http-dicom-server
+    name: http-dicom-srv
   type: NodePort
