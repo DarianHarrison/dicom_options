@@ -17,17 +17,22 @@ HARD_CODED_FILENAME="f689ddd2-662f8fe1-8b18180d-ec2a2cee-937917af"
 ##########################
 
 import requests
-BASE_URL="http://{}:{}@{}:{}".format(USER,PASS,HOST,PORT)
-x = requests.get(BASE_URL+"/instances")
+BASE_URL="http://{}:{}@{}:{}".format(USER,PASS,HOST,PORT) # optional replace http for https
+x = requests.get(BASE_URL+"/instances", verify=False)
 print("files: ",eval(x.text))
 
 ##########################
 # SAVE TO FILE
 ##########################
+import requests
+session = requests.sessions.Session() # New session
+session.verify = False   # Disable certificate checking
+
 from beren import Orthanc
 from requests.auth import HTTPBasicAuth
 
-REST_BASE_URL='http://{}:{}'.format(HOST,PORT)
+
+REST_BASE_URL='http://{}:{}'.format(HOST,PORT) # optional replace http for https
 
 auth = HTTPBasicAuth(USER, PASS)
 orthanc = Orthanc(REST_BASE_URL, auth=auth, warn_insecure=False)
@@ -35,7 +40,7 @@ orthanc = Orthanc(REST_BASE_URL, auth=auth, warn_insecure=False)
 def save_dcm_file(instance_id):
     fileName = '.'.join([instance_id, "dcm"])
     with open(fileName, 'wb') as dcm:
-        for chunk in orthanc.get_instance_file(instance_id):
+        for chunk in orthanc.get_instance_file(instance_id,session=session):
             dcm.write(chunk)
 
 save_dcm_file(HARD_CODED_FILENAME)
