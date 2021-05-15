@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: orthanc-ss-3
-  namespace: l10ns # modify here
+  namespace: catharina # modify here
   labels:
     hpecp.hpe.com/hpecp-internal-gateway: "true"  
 spec:
@@ -59,7 +59,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: orthanc-3
-  namespace: l10ns # modify here
+  namespace: catharina # modify here
   labels:
     app: orthanc
     hpecp.hpe.com/hpecp-internal-gateway: "true"
@@ -68,7 +68,7 @@ spec:
     app: orthanc  
   ports:
   - port: 8042
-    name: http-http-srv
+    name: http-http-srv # prefix http
   - port: 4242
     name: http-dicom-srv
   type: NodePort
